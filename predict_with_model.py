@@ -145,47 +145,47 @@ def predict_smishing(raw_message): # 원본 raw 메시지를 입력으로 받습
 
     return predicted_label, smishing_probability
 
-# --- 6. 예측 함수 실행 예시 ---
-# ... (예시 메시지 목록은 train_model.py와 동일하게 유지하거나 추가) ...
+# # --- 6. 예측 함수 실행 예시 ---
+# # ... (예시 메시지 목록은 train_model.py와 동일하게 유지하거나 추가) ...
 
-print("\n--- 새로운 메시지 판별 예시 (raw_text 입력, processed_text에서 구조적 특징 추출) ---")
+# print("\n--- 새로운 메시지 판별 예시 (raw_text 입력, processed_text에서 구조적 특징 추출) ---")
 
-test_messages = [
-    "안녕하세요. 오늘 하루도 힘내세요!", 
-    "[국외발신] 귀하의 계정이 도용되었습니다. 본인 확인 위해 https://suspicious.link/verify 즉시 접속바랍니다.", 
-    "축하합니다! 100만원 상금 당첨! 지금 바로 010-1234-5678 으로 연락하세요.", 
-    "다음주 모임 일정 다시 확인 부탁드려요.", 
-    "[Web발신] 최신 스마트폰 무료 지급 이벤트! 참여하려면 http://lucky-event.win/prize 클릭!", 
-    "택배 도착 예정입니다. 문 앞에 두고 가겠습니다.", 
-    "인증번호는 123456 입니다.", 
-    "안녕하세요 김철수님, 내일 3시에 회의 있습니다.", 
-    "[알림] 고객님 카드 5000원 사용 (스타벅스)", 
-    "이 사진 좀 봐봐 ㅋㅋ https://drive.google.com/file/d/abcdef12345/view", 
-    "택배 운송장번호 1234567890 조회: http://logistics.co.kr/track", 
-    "!!! 긴급 !!! 지금 바로 확인하세요 -> https://very-suspicious.co.kr", 
-    "OOO님께, 결제 오류 발생. 고객센터 070-5678-1234 연락 바랍니다.", 
-    "OOO에서 50000원 사용 승인되었습니다. 본인이 아닐 경우 즉시 신고하세요.", 
-    "안녕하세요? 잘 지내시죠? ^^", 
-    "점심 뭐 먹을지 정했어? ㅋㅋㅋ", 
-    "내일 오전 10시까지 보고서 제출 부탁드립니다.", 
-    "[알림] 새로운 메시지가 도착했습니다. 앱에서 확인하세요.", 
-    "무료쿠폰 지급! https://free-coupon.xyz 놓치지 마세요!", 
-    "00님, 안녕하세요. 주문번호 123456789 확인되었습니다.", 
-]
+# test_messages = [
+#     "안녕하세요. 오늘 하루도 힘내세요!", 
+#     "[국외발신] 귀하의 계정이 도용되었습니다. 본인 확인 위해 https://suspicious.link/verify 즉시 접속바랍니다.", 
+#     "축하합니다! 100만원 상금 당첨! 지금 바로 010-1234-5678 으로 연락하세요.", 
+#     "다음주 모임 일정 다시 확인 부탁드려요.", 
+#     "[Web발신] 최신 스마트폰 무료 지급 이벤트! 참여하려면 http://lucky-event.win/prize 클릭!", 
+#     "택배 도착 예정입니다. 문 앞에 두고 가겠습니다.", 
+#     "인증번호는 123456 입니다.", 
+#     "안녕하세요 김철수님, 내일 3시에 회의 있습니다.", 
+#     "[알림] 고객님 카드 5000원 사용 (스타벅스)", 
+#     "이 사진 좀 봐봐 ㅋㅋ https://drive.google.com/file/d/abcdef12345/view", 
+#     "택배 운송장번호 1234567890 조회: http://logistics.co.kr/track", 
+#     "!!! 긴급 !!! 지금 바로 확인하세요 -> https://very-suspicious.co.kr", 
+#     "OOO님께, 결제 오류 발생. 고객센터 070-5678-1234 연락 바랍니다.", 
+#     "OOO에서 50000원 사용 승인되었습니다. 본인이 아닐 경우 즉시 신고하세요.", 
+#     "안녕하세요? 잘 지내시죠? ^^", 
+#     "점심 뭐 먹을지 정했어? ㅋㅋㅋ", 
+#     "내일 오전 10시까지 보고서 제출 부탁드립니다.", 
+#     "[알림] 새로운 메시지가 도착했습니다. 앱에서 확인하세요.", 
+#     "무료쿠폰 지급! https://free-coupon.xyz 놓치지 마세요!", 
+#     "00님, 안녕하세요. 주문번호 123456789 확인되었습니다.", 
+# ]
 
-for msg in test_messages:
-    result, prob = predict_smishing(msg) 
-    print(f"'{msg}'")
-    if result == "판별 불가":
-         print(f" -> 판별 결과: {result}")
-    else:
-         print(f" -> 판별 결과: {result} (스미싱 확률: {prob:.2f})")
-    print("-" * 30)
+# for msg in test_messages:
+#     result, prob = predict_smishing(msg) 
+#     print(f"'{msg}'")
+#     if result == "판별 불가":
+#          print(f" -> 판별 결과: {result}")
+#     else:
+#          print(f" -> 판별 결과: {result} (스미싱 확률: {prob:.2f})")
+#     print("-" * 30)
 
 # --- 새로운 메시지를 직접 입력받아 판별하는 루프 (선택 사항) ---
 print("\n--- 직접 메시지 입력하여 판별하기 (종료: 'quit' 또는 'exit') ---")
 while True:
-    user_input = input("판별할 문자 메시지를 입력하세요 (종료: quit): ")
+    user_input = input("판별할 문자 메시지를 입력하세요 (종료: 'quit' 또는 'exit'): ")
     if user_input.lower() in ['quit', 'exit']:
         break
     result, prob = predict_smishing(user_input)
