@@ -96,7 +96,17 @@ def predict_smishing(raw_message):
     prob = model.predict_proba(X_combined)[0][model.classes_.tolist().index(1)]
     return reverse_label_map.get(label_id, '알 수 없음'), prob
 
-# --- URL 실제 접속 검사 ---
+# 화이트 리스트에 추가할 사이트들
+whitelist = [
+    'youtube.com', 'reddit.com', 'google.com', 'facebook.com', 'twitter.com',
+    'wikipedia.org', 'amazon.com', 'github.com', 'linkedin.com', 'instagram.com'
+]
+
+# 블랙 리스트에 추가할 사이트들
+blacklist = [
+    'bit.ly', 'tinyurl.com', 'goo.gl', 'ow.ly'
+]
+
 def check_url_safety(urls):
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
@@ -106,11 +116,22 @@ def check_url_safety(urls):
     results = []
 
     for url in urls:
+        # 화이트 리스트에 있는 사이트는 무조건 '안전'으로 처리
+        if any(whitelisted in url for whitelisted in whitelist):
+            time.sleep(5)
+            results.append((url, '안전'))
+            continue
+
+        # 블랙 리스트에 있는 사이트는 무조건 '위험'으로 처리
+        if any(blacklisted in url for blacklisted in blacklist):
+            time.sleep(5)
+            results.append((url, '위험'))
+            continue
+
         try:
             driver = webdriver.Chrome(options=options)
-            driver.set_page_load_timeout(10)
+            driver.set_page_load_timeout(5)
             driver.get(url)
-            time.sleep(3)
             source = driver.page_source.lower()
 
             # 간단한 악성 키워드 검색
@@ -120,7 +141,8 @@ def check_url_safety(urls):
             else:
                 results.append((url, '안전'))
         except Exception as e:
-            results.append((url, f'위험: 오류 발생 ({str(e)[:30]}...)'))
+            # 오류가 발생한 경우 '위험'으로 표시하지 않고 '오류 발생'으로 처리
+            results.append((url, f'오류 발생 ({str(e)[:30]}...)'))
         finally:
             try:
                 driver.quit()
@@ -141,7 +163,7 @@ def main():
             print("프로그램을 종료합니다.")
             break
 
-        label, prob = predict_smishing(msg)  # '정상' 또는 '스미싱 의심'
+        label, prob = predict_smishing(msg) # '정상' 또는 '스미싱 의심'
         urls = extract_urls(msg)
 
         if urls:
@@ -156,7 +178,7 @@ def main():
         print(f"- URL 추출: {urls if urls else '없음'}")
         print(f"- 링크 상태: {result}")
         for url, status in detail:
-            print(f"  > {url} : {status}")
+            print(f" > {url} : {status}")
 
         # 종합 판단
         print("\n[최종 판단]")
